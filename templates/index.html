@@ -4,15 +4,50 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHA-256 and HMAC-SHA256 Calculator</title>
+    <title>MAC Generator for AES Encrypted Text</title>
+    <script>
+        function toggleKeyInput() {
+            var selectElement = document.getElementById("mac_algorithm");
+            var keyInput = document.getElementById("key");
+            var keyLabel = document.getElementById("key_label");
+
+            if (selectElement.value === "hmac_sha256") {
+                keyInput.style.display = "block";
+                keyInput.placeholder = "Enter HMAC Key";
+                keyInput.required = true;
+                keyLabel.innerText = "Key:";
+            } else {
+                keyInput.style.display = "none";
+                keyInput.placeholder = "";
+                keyInput.required = false;
+                if (selectElement.value === "cbc_mac_aes" || selectElement.value === "gmac_aes") {
+                    keyLabel.innerText = "Key (Automatically Generated)";
+                } else {
+                    keyInput.value = "";
+                    keyLabel.innerText = "Key:";
+                }
+            }
+        }
+
+        // Call toggleKeyInput on page load
+        window.onload = function() {
+            toggleKeyInput();
+        };
+    </script>
 </head>
 <body>
-    <h1>SHA-256 and HMAC-SHA256 Calculator</h1>
-    <form action="/calculate-hmac-sha256" method="post">
+    <h1>SHA-256, HMAC-SHA256, CBC-MAC, and GMAC Calculator</h1>
+    <form action="/calculate-macs" method="post">
         <label for="aes_encrypted_text">AES Encrypted Text:</label>
         <input type="text" id="aes_encrypted_text" name="aes_encrypted_text" required><br><br>
-        <label for="hmac_key">HMAC Key:</label>
-        <input type="text" id="hmac_key" name="hmac_key" required><br><br>
+        <label for="key" id="key_label">Key:</label>
+        <input type="text" id="key" name="key" style="display: none;"><br><br>
+        <label for="mac_algorithm">Select MAC Algorithm:</label>
+        <select id="mac_algorithm" name="mac_algorithm" onchange="toggleKeyInput()">
+            <option value="hmac_sha256" selected>HMAC-SHA256</option>
+            <option value="cbc_mac_aes">CBC-MAC (AES)</option>
+            <option value="gmac_aes">GMAC (AES)</option>
+        </select><br><br>
         <input type="submit" value="Calculate">
     </form>
 </body>

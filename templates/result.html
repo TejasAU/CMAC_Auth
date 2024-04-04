@@ -9,7 +9,17 @@
 <body>
     <h1>Result</h1>
     <p><strong>AES Encrypted Text:</strong> {{ aes_encrypted_text }}</p>
-    <p><strong>HMAC Key:</strong> {{ hmac_key }}</p>
+    <p><strong>Key:</strong> {{ key }}</p>
+    <p><strong>MAC Algorithm:</strong> {{ mac_algorithm }}</p>
+    {% if mac_algorithm == 'hmac_sha256' %}
     <p><strong>HMAC-SHA256 code:</strong> {{ hash_value }}</p>
+    {% elif mac_algorithm == 'cbc_mac_aes' %}
+    <p><strong>CBC-MAC code:</strong> {{ hash_value }}</p>
+    {% elif mac_algorithm == 'gmac_aes' %}
+    <p><strong>GMAC code:</strong> {{ hash_value }}</p>
+    {% else %}
+    <p><strong>Invalid MAC algorithm selected</strong></p>
+    {% endif %}
+    <a href="/">Back to Input Form</a>
 </body>
 </html>
